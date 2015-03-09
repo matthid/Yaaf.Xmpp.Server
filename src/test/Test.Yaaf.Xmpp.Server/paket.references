@@ -1,0 +1,16 @@
+Yaaf.FSharp.Helper
+Yaaf.Sasl.Ldap
+Yaaf.Xmpp.Runtime
+Yaaf.Xmpp.IM
+Yaaf.Xmpp.IM.MySQL
+Yaaf.Xmpp.ServiceDiscovery
+Yaaf.Xmpp.VCard
+Yaaf.Xmpp.MessageArchiving
+Yaaf.MessageArchiveManager
+Yaaf.MessageArchiveManager.IMAP
+Yaaf.MessageArchiveManager.MySQL
+FSharp.Core
+Unquote
+Foq
+FsUnit
+NUnit

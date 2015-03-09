@@ -1,0 +1,44 @@
+﻿
+Domain: domain.tld
+
+ServerPorts:
+  - Type: s2s
+    Port: 15269
+  - Type: c2s
+    Port: 15222
+  - Type: component
+    Port: 15347
+
+Certificate:
+  Private: /etc/ssl/cert.pem
+  Public: /etc/ssl/cert.pem
+  Password : ""
+  
+Components:
+  - Domain: gtalk.devel-xmpp.yaaf.de
+    Secret: secret_gtalk 
+  - Domain: facebook.devel-xmpp.yaaf.de
+    Secret: secret_facebook
+
+Authentication:
+  - Type: ldap
+    ConnectionString: "Server=ldap.yaaf.de;Port=636;SSL=true"
+    MapUserId: "uid={0},ou=People,dc=yaaf,dc=de"
+
+RosterStore:
+  - Type: mysql
+    ConnectionString: Server=localhost;Database=rosterstore_migrate;Uid=xmpp_sql;Pwd=password
+  - Type: mssql
+    ConnectionString: Data Source=server1;Initial Catalog=Database1;Integrated Security=SSPI;
+
+MessageArchive:
+  - Type: "imap"
+    Writeonly: true
+    ReplacePreferenceStoreWithMemory: false
+    ConnectionString: "Server=imap.yaaf.de;Uid=user;Pwd=password;Folder=user.{0}.Chats.Xmpp;Timeout=5000"
+  - Type: "mysql"
+    Writeonly: false
+    ConnectionString: "Server=localhost;Database=message_archive;Uid=xmpp;Pwd=password"
+  - Type: mssql
+    Writeonly: false
+    ConnectionString: Data Source=server1;Initial Catalog=message_archive;Integrated Security=SSPI;
