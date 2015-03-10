@@ -22,7 +22,8 @@ This is a xmpp server implementation using the `Yaaf.Xmpp.*` packages.
 The implementation is here to provide additional (integration-)tests for the `Yaaf.Xmpp.*` packages and so you can look into an example usage of those packages.
 
 On the other hand it is a full fledged xmpp server ready to use.
-Note that this project is at a very early state and some security features are still missing!
+
+> Note that this project is at a very early state and some security features are still missing!
 
 If you want to get running:
 
