@@ -22,7 +22,7 @@ let startLogging runName levelConsole levelFile =
     let listeners = 
         [| 
             if levelConsole <> level_off then
-                yield Log.ConsoleLogger level_warn |> prepare levelConsole
+                yield Log.ConsoleLogger levelConsole  |> prepare levelConsole
             if levelFile <> level_off then
                 yield new SimpleXmlWriterTraceListener("Yaaf.Xmpp.Server.Run.svclog") |> prepare levelFile
         |] : System.Diagnostics.TraceListener[] 

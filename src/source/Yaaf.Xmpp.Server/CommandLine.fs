@@ -143,7 +143,7 @@ Options:
                     System.Threading.Thread.Sleep(1000)
 
         cleanUp()
-
+        runActivity.Dispose()
         printfn "All shut down, exiting..."
         0
 

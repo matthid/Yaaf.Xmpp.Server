@@ -1,4 +1,5 @@
 source https://nuget.org/api/v2
+redirects: on
 
 //Build
 nuget Yaaf.AdvancedBuilding
@@ -22,11 +23,18 @@ nuget Yaaf.MessageArchiveManager
 nuget Yaaf.MessageArchiveManager.IMAP
 nuget Yaaf.MessageArchiveManager.MySQL
 
+// Not required but we restrict updates...
+nuget EntityFramework == 6.0.2
+nuget Microsoft.AspNet.Identity.Core == 1.0.0
+nuget Microsoft.AspNet.Identity.EntityFramework == 1.0.0
+nuget MySql.Data == 6.8.3
+nuget MySQL.Data.Entities == 6.8.3.0
+
 // Test
 // Until Visual Studio test runner supports later versions.
 nuget NUnit == 2.6.3
 nuget Unquote
-nuget Foq
+nuget Foq content: none
 nuget FsUnit
 
 github matthid/Yaaf.FSharp.Helper src/test/Test.Yaaf.FSharp.Helper/MyTestClass.fs

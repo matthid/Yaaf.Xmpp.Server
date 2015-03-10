@@ -10,6 +10,7 @@ open System.Collections.Generic
 open System.Data.Common
 open System.Data.Entity
 
+open Yaaf.Helper
 open Yaaf.Logging
 open Yaaf.Xmpp.IM.Server
 open Yaaf.Xmpp.IM.Sql
@@ -74,19 +75,55 @@ type ConnectionStore<'T>() =
     static let mutable connection = null : string
     static member Connection with get() = connection and set v = connection <- v
 module ConnectionStore =
-    let Create<'T when 'T : (new : unit -> 'T)> (connectionString) =
+    let Create<'T when 'T : (new : unit -> 'T) and 'T :> DbContext> (connectionString) =
         if ConnectionStore<'T>.Connection <> null then
           failwith "multiple connections to the same database type are not supported"
         ConnectionStore<'T>.Connection <- connectionString
+        ( 
+          Log.Info(fun () -> L "Initialize Database %s (connected via: %s)" (typeof<'T>.Name) connectionString)
+          use c =
+            try
+              new 'T()
+            with :? System.Reflection.TargetInvocationException as e ->
+              Async.reraise e.InnerException
+
+          c.Database.Initialize(false)
+          c.SaveChanges() |> ignore
+        )
         fun () -> new 'T()
-         
-//[<DbConfigurationType (typeof<EmptyConfiguration>)>]
+type MySqlHistoryContext (con, scheme) =
+    inherit System.Data.Entity.Migrations.History.HistoryContext(con, scheme)
+
+    override x.OnModelCreating(modelBuilder) = 
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<System.Data.Entity.Migrations.History.HistoryRow>()
+          .Property(fun h -> h.MigrationId).HasMaxLength(System.Nullable(100)).IsRequired()
+          |> ignore
+        modelBuilder.Entity<System.Data.Entity.Migrations.History.HistoryRow>()
+          .Property(fun h -> h.ContextKey).HasMaxLength(System.Nullable(200)).IsRequired()
+          |> ignore
+
 type MSSQLRosterDatabase<'T> () = 
     inherit AbstractRosterStoreDbContext(ConnectionStore<MSSQLRosterDatabase<'T>>.Connection)
 
-//[<DbConfigurationType (typeof<MySql.Data.Entity.MySqlEFConfiguration>)>]
-type MySQLRosterDatabase<'T> () = 
-    inherit AbstractRosterStoreDbContext(ConnectionStore<MSSQLRosterDatabase<'T>>.Connection)
+type MySQLConfiguration<'T when 'T :> DbContext> () as x =
+    inherit System.Data.Entity.Migrations.DbMigrationsConfiguration<'T> ()
+    do
+      x.CodeGenerator <- new MySql.Data.Entity.MySqlMigrationCodeGenerator()
+      x.SetSqlGenerator("MySql.Data.MySqlClient", new MySql.Data.Entity.MySqlMigrationSqlGenerator ())
+      x.SetHistoryContextFactory("MySql.Data.MySqlClient", fun conn schema -> new MySqlHistoryContext(conn, schema) :> _)
+
+      x.AutomaticMigrationsEnabled <- true
+    override x.Seed(context) = ()
+
+type [<DbConfigurationType (typeof<MySql.Data.Entity.MySqlEFConfiguration>)>] MySQLRosterDatabase<'T> () = 
+    inherit AbstractRosterStoreDbContext(ConnectionStore<MySQLRosterDatabase<'T>>.Connection)
+    override x.Init () = 
+        DbConfiguration.SetConfiguration (new MySql.Data.Entity.MySqlEFConfiguration ())
+        System.Data.Entity.Database.SetInitializer<MySQLRosterDatabase<'T>> (
+            new MigrateDatabaseToLatestVersion<MySQLRosterDatabase<'T>, MySQLConfiguration<MySQLRosterDatabase<'T>>> ())
+
 
 let CreateRosterStore (stores : ConfigFile.RosterStore_Item_Type seq) =
     let rosterStores =
@@ -111,8 +148,13 @@ let CreateRosterStore (stores : ConfigFile.RosterStore_Item_Type seq) =
 type MSSQLMessageArchiveDatabase<'T> () = 
     inherit AbstractMessageArchivingDbContext(ConnectionStore<MSSQLMessageArchiveDatabase<'T>>.Connection)
 
-type MySQLMessageArchiveDatabase<'T> () = 
+
+and [<DbConfigurationType (typeof<MySql.Data.Entity.MySqlEFConfiguration>)>] MySQLMessageArchiveDatabase<'T> () = 
     inherit AbstractMessageArchivingDbContext(ConnectionStore<MySQLMessageArchiveDatabase<'T>>.Connection)
+    override x.Init () = 
+        DbConfiguration.SetConfiguration (new MySql.Data.Entity.MySqlEFConfiguration ())
+        System.Data.Entity.Database.SetInitializer<MySQLMessageArchiveDatabase<'T>> (
+            new MigrateDatabaseToLatestVersion<MySQLMessageArchiveDatabase<'T>, MySQLConfiguration<MySQLMessageArchiveDatabase<'T>>> ())
  
 // Hack because we do not have this implemented properly in the backends for now.
 type ReplacePreferenceStoreWithMemory (defStore : Yaaf.Xmpp.MessageArchiving.IMessageArchivingStore) = 
