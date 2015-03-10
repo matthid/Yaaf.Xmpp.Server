@@ -34,26 +34,16 @@ let buildConfig =
  // Read release notes document
  let release = ReleaseNotesHelper.parseReleaseNotes (File.ReadLines "doc/ReleaseNotes.md")
  { BuildConfiguration.Defaults with
-    ProjectName = "Yaaf.Xmpp.ServiceDiscovery"
-    CopyrightNotice = "Yaaf.Xmpp.ServiceDiscovery Copyright © Matthias Dittrich 2015"
-    ProjectSummary = "A XEP-0030 (Service-Discovery) implementation."
-    ProjectDescription = "A XEP-0030 (Service-Discovery) implementation."
+    ProjectName = "Yaaf.Xmpp.Server"
+    CopyrightNotice = "Yaaf.Xmpp.Server Copyright © Matthias Dittrich 2015"
+    ProjectSummary = "A xmpp server implementation."
+    ProjectDescription = "A xmpp server implementation."
     ProjectAuthors = ["Matthias Dittrich"]
-    NugetTags =  "fsharp csharp xmpp service discovery library"
+    NugetTags =  "fsharp csharp xmpp server"
     PageAuthor = "Matthias Dittrich"
     GithubUser = "matthid"
     Version = release.NugetVersion
-    NugetPackages =
-      [ "Yaaf.Xmpp.ServiceDiscovery.nuspec", (fun config p ->
-          { p with
-              Version = config.Version
-              ReleaseNotes = toLines release.Notes
-              Dependencies = 
-                [ "Yaaf.Xmpp.Runtime"
-                  "Yaaf.FSharp.Helper"
-                  "Yaaf.DependencyInjection"
-                  "FSharp.Core" ] 
-                  |> List.map (fun name -> name, (GetPackageVersion "packages" name)) }) ]
+    NugetPackages = []
     UseNuget = false
     SetAssemblyFileVersions = (fun config ->
       let info =
@@ -67,12 +57,7 @@ let buildConfig =
       //CreateCSharpAssemblyInfo "./src/SolutionInfo.cs" info
       )
     EnableProjectFileCreation = false
-    //GeneratedFileList =
-    //    [ "DnDns.dll"
-    //      "Mono.System.Xml.dll"
-    //      "Yaaf.Xml.dll"; "Yaaf.Xml.xml"
-    //      "Yaaf.Xmpp.Runtime.Core.dll"; "Yaaf.Xmpp.Runtime.Core.xml"
-    //      "Yaaf.Xmpp.Runtime.dll"; "Yaaf.Xmpp.Runtime.xml"; "Yaaf.Xmpp.Runtime.config" ]
+    GeneratedFileList = [ "Yaaf.Xmpp.Server.exe"; "Yaaf.Xmpp.Server.xml" ]
     BuildTargets =
      [ { BuildParams.WithSolution with
           // The default build

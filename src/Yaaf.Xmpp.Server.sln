@@ -21,11 +21,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{1572AB1D-0D2
 	ProjectSection(SolutionItems) = preProject
 		..\doc\DevelopReadme.md = ..\doc\DevelopReadme.md
 		..\doc\ReleaseNotes.md = ..\doc\ReleaseNotes.md
+		..\doc\SupportedFeatures.md = ..\doc\SupportedFeatures.md
 	EndProjectSection
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Yaaf.Xmpp.Server", "source\Yaaf.Xmpp.Server\Yaaf.Xmpp.Server.fsproj", "{2780ED8F-9718-485F-B231-26B2E8AA5D9F}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Test.Yaaf.Xmpp.Server", "test\Test.Yaaf.Xmpp.Server\Test.Yaaf.Xmpp.Server.fsproj", "{DD82CEC5-4D0F-4A40-A54E-6FDCD79DCBDD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{525A8B94-9408-4D71-BC9E-8627F0EFE027}"
+	ProjectSection(SolutionItems) = preProject
+		..\doc\templates\template.cshtml = ..\doc\templates\template.cshtml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,5 +53,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{DD82CEC5-4D0F-4A40-A54E-6FDCD79DCBDD} = {ED8079DD-2B06-4030-9F0F-DC548F98E1C4}
+		{525A8B94-9408-4D71-BC9E-8627F0EFE027} = {1572AB1D-0D26-476E-AEE8-4D4D37CE8033}
 	EndGlobalSection
 EndGlobal
