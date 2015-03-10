@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Yaaf.Xmpp.Server
+</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A xmpp server implementation.">
+    <meta name="author" content="Matthias Dittrich">
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+
+    <link type="text/css" rel="stylesheet" href="https://matthid.github.io/Yaaf.Xmpp.Server/content/style.css" />
+    <link type="text/css" rel="stylesheet" href="https://matthid.github.io/Yaaf.Xmpp.Server/content/prism.css" />
+    <script type="text/javascript" src="https://matthid.github.io/Yaaf.Xmpp.Server/content/tips.js"></script>
+    <script type="text/javascript" src="https://matthid.github.io/Yaaf.Xmpp.Server/content/prism.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li><a href="http://fsharp.org">fsharp.org</a></li>
+          <li><a href="http://tpetricek.github.io/FSharp.Formatting/"><img height="16" width="16" src="https://matthid.github.io/Yaaf.AdvancedBuilding/content/img/FSharp.Formatting.png" /> F# Formatting</a></li>
+        </ul>
+        <h3 class="muted"><a href="https://matthid.github.io/Yaaf.Xmpp.Server/index.html">Yaaf.Xmpp.Server</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+<!-- GENERATED FROM COMMIT: 8ec5f238a6ee5429f48cd61eabf2fa344e38d818 -->
+<h1><a name="Yaaf-Xmpp-Server" class="anchor" href="#Yaaf-Xmpp-Server">Yaaf.Xmpp.Server</a></h1>
+
+<h2><a name="Documentation" class="anchor" href="#Documentation"><a href="https://matthid.github.io/Yaaf.Xmpp.Server/">Documentation</a></a></h2>
+
+<p><a href="https://gitter.im/matthid/Yaaf.Xmpp.Runtime?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Join the chat at https://gitter.im/matthid/Yaaf.Xmpp.Runtime" /></a></p>
+
+<h2><a name="Build-status" class="anchor" href="#Build-status">Build status</a></h2>
+
+<p><strong>Development Branch</strong></p>
+
+<p><a href="https://travis-ci.org/matthid/Yaaf.Xmpp.Server"><img src="https://travis-ci.org/matthid/Yaaf.Xmpp.Server.svg?branch=develop" alt="Build Status" /></a>
+<a href="https://ci.appveyor.com/project/matthid/yaaf-xmpp-server/branch/develop"><img src="https://ci.appveyor.com/api/projects/status/wek4hrna9dm1a09i/branch/develop?svg=true" alt="Build status" /></a></p>
+
+<p><strong>Master Branch</strong></p>
+
+<p><a href="https://travis-ci.org/matthid/Yaaf.Xmpp.Server"><img src="https://travis-ci.org/matthid/Yaaf.Xmpp.Server.svg?branch=master" alt="Build Status" /></a>
+<a href="https://ci.appveyor.com/project/matthid/yaaf-xmpp-server/branch/master"><img src="https://ci.appveyor.com/api/projects/status/wek4hrna9dm1a09i/branch/master?svg=true" alt="Build status" /></a></p>
+
+<h2><a name="Quickstart" class="anchor" href="#Quickstart">Quickstart</a></h2>
+
+<p>This is a xmpp server implementation using the <code>Yaaf.Xmpp.*</code> packages.
+The implementation is here to provide additional (integration-)tests for the <code>Yaaf.Xmpp.*</code> packages and so you can look into an example usage of those packages.</p>
+
+<p>On the other hand it is a full fledged xmpp server ready to use.
+Note that this project is at a very early state and some security features are still missing!</p>
+
+<p>If you want to get running:</p>
+
+<pre class="line-numbers language-bash"><code class="language-bash">git clone https://github.com/matthid/Yaaf.Xmpp.Server.git
+cd Yaaf.Xmpp.Server
+# or download a .zip or .tar.gz from https://github.com/matthid/Yaaf.Xmpp.Server/tags
+build.cmd # or ./build.sh on linux
+</code></pre>
+
+<p>If everything worked you now have a working xmpp server binary, now you need to configure your server:
+Just create a file <code>temp/localServer.yaml</code></p>
+
+<pre class="line-numbers language-yaml"><code class="language-yaml"># Your domain
+Domain: xmpp.domain.tld
+
+# This are the default ports
+ServerPorts:
+  - Type: s2s
+    Port: 5269
+  - Type: c2s
+    Port: 5222
+  - Type: component
+    Port: 5347
+
+# You need to create the certificates four your domain and insert the correct paths here.
+Certificate:
+  Private: &quot;C:/projects/Yaaf.Xmpp.Server/temp/key.pem&quot;
+  Public: &quot;C:/projects/Yaaf.Xmpp.Server/temp/cert.pem&quot;
+  Password : &quot;&quot;
+
+# Your components
+Components: []
+# If you want to specify components they look like this:
+#Components:
+#  - Domain: gtalk.devel-xmpp.yaaf.de
+#    Secret: secret_gtalk
+#  - Domain: facebook.devel-xmpp.yaaf.de
+#    Secret: secret_facebook
+
+# currently only ldap is supported
+Authentication:
+  - Type: ldap
+    ConnectionString: &quot;Server=ldap.domain.tld;Port=636;SSL=true&quot;
+    MapUserId: &quot;uid={0},ou=People,dc=domain,dc=tld&quot;
+
+# You can specify mysql or mssql
+RosterStore:
+  - Type: mysql
+    ConnectionString: Server=localhost;Database=xmpp;Uid=xmpp;Pwd=password
+# a mssql connection string looks like this (for database files): Data Source=(LocalDb)\v11.0;AttachDbFilename=|DataDirectory|\rosterdb-nunit.mdf;Integrated Security=True
+# or: Data Source=(local)\\SQL2014;Database=rosterstore_nunit;User ID=sa;Password=Password12!
+
+MessageArchive:
+# enable this if you want that your messages get written to an imap folder
+# note that the given user needs access to the mailbox specified in `Folder`
+#  - Type: &quot;imap&quot;
+#    Writeonly: true
+#    ReplacePreferenceStoreWithMemory: false
+#    ConnectionString: &quot;Server=imap.domain.tld;Uid=user;Pwd=password;Folder=user.{0}.Chats.LocalDevelXmpp;Timeout=5000&quot;
+  - Type: &quot;mysql&quot;
+    Writeonly: false
+    ReplacePreferenceStoreWithMemory: true
+    ConnectionString: &quot;Server=localhost;Database=xmpp;Uid=xmpp;Pwd=password&quot;
+
+</code></pre>
+
+<p>If you use a real database (ie no database files) you need to create the specified user and grant access. For example</p>
+
+<pre class="line-numbers language-mysql"><code class="language-mysql">GRANT ALL PRIVILEGES ON xmpp.* To &#39;xmpp&#39;@&#39;localhost&#39; IDENTIFIED BY &#39;password&#39;;
+</code></pre>
+
+<p>Now you can run the server:</p>
+
+<pre class="line-numbers language-bash"><code class="language-bash">runServer.cmd # or ./runServer.sh on linux
+</code></pre>
+
+
+        </div>
+        <div class="span3">
+          <a href="https://matthid.github.io/Yaaf.Xmpp.Server/index.html">
+            <img src="https://matthid.github.io/Yaaf.Xmpp.Server/content/img/logo.png" style="width:140px;height:140px;margin:10px 0px 0px 35px;border-style:none;" />
+          </a>
+
+          <ul class="nav nav-list" id="menu">
+
+            <li class="nav-header">Yaaf.Xmpp.Server</li>
+
+            <li class="divider"></li>
+            <li><a href="https://www.nuget.org/packages/Yaaf.Xmpp.Server/">Get Yaaf.Xmpp.Server package via NuGet</a></li>
+            <li><a href="https://github.com/matthid/Yaaf.Xmpp.Server">Source Code</a></li>
+            <li><a href="https://github.com/matthid//issues">Open bugs and feature requests</a></li>
+            <li><a href="https://github.com/matthid//issues/new">Report Issue or Request Feature</a></li>
+            <li><a href="https://github.com/matthid/Yaaf.Xmpp.Server/blob/develop/LICENSE.md">License (Apache 2)</a></li>
+            <li><a href="https://matthid.github.io/Yaaf.Xmpp.Server/Contributing.html">Contributing</a></li>
+            
+            <li class="nav-header">Documentation</li>
+              
+            <li><a href="https://matthid.github.io/Yaaf.Xmpp.Server/index.html">Quick Intro</a></li>
+            <li><a href="https://matthid.github.io/Yaaf.Xmpp.Server/ReleaseNotes.html">Release Notes</a></li>
+            <li><a href="https://matthid.github.io/Yaaf.Xmpp.Server/DevelopReadme.html">Development Intro</a></li>
+            <li><a href="https://matthid.github.io/Yaaf.Xmpp.Server/SupportedFeatures.html">Supported Features</a></li>
+
+            <li class="nav-header">Reference</li>
+              
+            <li><a href="https://matthid.github.io/Yaaf.Xmpp.Server/references/index.html">API Reference</a></li>
+
+          </ul>
+        </div>
+      </div>
+    </div>
+      <a href="https://github.com/matthid/Yaaf.Xmpp.Server"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+    </body>
+  </html>

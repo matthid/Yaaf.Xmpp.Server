@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>F# Yaaf.Xmpp.Server Supported Specifications
+</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A xmpp server implementation.">
+    <meta name="author" content="Matthias Dittrich">
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+
+    <link type="text/css" rel="stylesheet" href="https://matthid.github.io/Yaaf.Xmpp.Server/content/style.css" />
+    <link type="text/css" rel="stylesheet" href="https://matthid.github.io/Yaaf.Xmpp.Server/content/prism.css" />
+    <script type="text/javascript" src="https://matthid.github.io/Yaaf.Xmpp.Server/content/tips.js"></script>
+    <script type="text/javascript" src="https://matthid.github.io/Yaaf.Xmpp.Server/content/prism.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li><a href="http://fsharp.org">fsharp.org</a></li>
+          <li><a href="http://tpetricek.github.io/FSharp.Formatting/"><img height="16" width="16" src="https://matthid.github.io/Yaaf.AdvancedBuilding/content/img/FSharp.Formatting.png" /> F# Formatting</a></li>
+        </ul>
+        <h3 class="muted"><a href="https://matthid.github.io/Yaaf.Xmpp.Server/index.html">Yaaf.Xmpp.Server</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+<h1><a name="F-Yaaf-Xmpp-Server-Supported-Specifications" class="anchor" href="#F-Yaaf-Xmpp-Server-Supported-Specifications">F# Yaaf.Xmpp.Server Supported Specifications</a></h1>
+
+<h2><a name="Supported-RFCs" class="anchor" href="#Supported-RFCs">Supported RFCs</a></h2>
+
+<ul>
+<li><a href="http://xmpp.org/rfcs/rfc6120.html">RFC 6120 - XMPP Core</a> via <a href="https://github.com/matthid/Yaaf.Xmpp.Runtime">https://github.com/matthid/Yaaf.Xmpp.Runtime</a></li>
+<li><a href="http://xmpp.org/rfcs/rfc6121.html">RFC 6121 - XMPP IM</a> via <a href="https://github.com/matthid/Yaaf.Xmpp.IM">https://github.com/matthid/Yaaf.Xmpp.IM</a></li>
+</ul>
+
+<h2><a name="RFCs-planned" class="anchor" href="#RFCs-planned">RFCs (planned)</a></h2>
+
+<ul>
+<li><a href="http://xmpp.org/rfcs/rfc6122.html">RFC 6122 - XMPP AF (planned)</a></li>
+</ul>
+
+<h2><a name="Supported-XEPs" class="anchor" href="#Supported-XEPs">Supported XEPs</a></h2>
+
+<ul>
+<li><a href="http://xmpp.org/extensions/xep-0030.html">XEP-0030: Service Discovery</a> via <a href="https://github.com/matthid/Yaaf.Xmpp.ServiceDiscovery">https://github.com/matthid/Yaaf.Xmpp.ServiceDiscovery</a></li>
+<li><a href="http://xmpp.org/extensions/xep-0136.html">XEP-0136: Message Archiving</a> (XEP-0059 is missing) via <a href="https://github.com/matthid/Yaaf.Xmpp.MessageArchiving">https://github.com/matthid/Yaaf.Xmpp.MessageArchiving</a></li>
+<li><p><a href="http://xmpp.org/extensions/xep-0054.html">XEP-0054: vcard-temp</a> via <a href="https://github.com/matthid/Yaaf.Xmpp.VCARd">https://github.com/matthid/Yaaf.Xmpp.VCARd</a></p></li>
+<li><a href="http://xmpp.org/extensions/xep-0203.html">XEP-0203: Delayed Delivery</a> via <a href="https://github.com/matthid/Yaaf.Xmpp.IM/blob/develop/src/source/Yaaf.Xmpp.IM/DelayedDelivery.fs">https://github.com/matthid/Yaaf.Xmpp.IM/blob/develop/src/source/Yaaf.Xmpp.IM/DelayedDelivery.fs</a></li>
+<li><a href="http://xmpp.org/extensions/xep-0280.html">XEP-0280: Message Carbons</a> via <a href="https://github.com/matthid/Yaaf.Xmpp.IM/blob/develop/src/source/Yaaf.Xmpp.IM/MessageCarbons.fs">https://github.com/matthid/Yaaf.Xmpp.IM/blob/develop/src/source/Yaaf.Xmpp.IM/MessageCarbons.fs</a></li>
+<li><a href="http://xmpp.org/extensions/xep-0297.html">XEP-0297: Stanza Forwarding</a> via <a href="https://github.com/matthid/Yaaf.Xmpp.IM/blob/develop/src/source/Yaaf.Xmpp.IM/StanzaForwarding.fs">https://github.com/matthid/Yaaf.Xmpp.IM/blob/develop/src/source/Yaaf.Xmpp.IM/StanzaForwarding.fs</a></li>
+</ul>
+
+<h3><a name="Server-Only-XEPs" class="anchor" href="#Server-Only-XEPs">Server Only XEPs</a></h3>
+
+<ul>
+<li><a href="http://xmpp.org/extensions/xep-0114.html">XEP-0114: Jabber Component Protocol</a> via <a href="https://github.com/matthid/Yaaf.Xmpp.Runtime/blob/develop/src/source/Yaaf.Xmpp.Runtime/Runtime/ComponentNegotiation.fs">https://github.com/matthid/Yaaf.Xmpp.Runtime/blob/develop/src/source/Yaaf.Xmpp.Runtime/Runtime/ComponentNegotiation.fs</a></li>
+<li><a href="http://xmpp.org/extensions/xep-0225.html">XEP-0225: Component Connections</a> (not really implemented but it is trivial to support)</li>
+<li><a href="http://xmpp.org/extensions/xep-0160.html">XEP-0160: Best Practices for Handling Offline Messages</a> via <a href="https://github.com/matthid/Yaaf.Xmpp.MessageArchiving">https://github.com/matthid/Yaaf.Xmpp.MessageArchiving</a></li>
+</ul>
+
+<h2><a name="XEPs-started-or-soon-to-be-started-in-this-order" class="anchor" href="#XEPs-started-or-soon-to-be-started-in-this-order">XEPs (started or soon to be started, in this order)</a></h2>
+
+<ul>
+<li><p><a href="http://xmpp.org/extensions/xep-0079.html">XEP-0079: Advanced Message Processing</a></p></li>
+<li>SERVER: <a href="http://xmpp.org/extensions/xep-0220.html">XEP-0220: Server Dialback</a></li>
+<li><p>SERVER: <a href="http://xmpp.org/extensions/xep-0288.html">XEP-0288: Bidirectional Server-to-Server Connections</a></p></li>
+<li><p><a href="http://xmpp.org/extensions/xep-0059.html">XEP-0059: Result Set Management</a></p></li>
+</ul>
+
+<h2><a name="XEPs-planned" class="anchor" href="#XEPs-planned">XEPs (planned)</a></h2>
+
+<p>Note that the "CLIENT:" XEPs are client only XEPs and therefore already supported by the server.</p>
+
+<ul>
+<li><a href="http://xmpp.org/extensions/xep-0199.html">XEP-0199: XMPP Ping</a></li>
+<li><a href="http://xmpp.org/extensions/xep-0144.html">XEP-0144: Roster Item Exchange</a></li>
+<li><a href="http://xmpp.org/extensions/xep-0082.html">XEP-0082: XMPP Date and Time Profiles</a></li>
+<li><a href="http://xmpp.org/extensions/xep-0045.html">XEP-0045: Multi-User Chat</a></li>
+<li><a href="http://xmpp.org/extensions/xep-0016.html">XEP-0016: Privacy Lists</a></li>
+<li><p><a href="http://xmpp.org/extensions/xep-0126.html">XEP-0126: Invisibility</a>, we extend it in a way so that no "offline -> change -> online" cycle is necessary.</p></li>
+<li>CLIENT: <a href="http://xmpp.org/extensions/xep-0100.html">XEP-0100: Gateway Interaction</a></li>
+<li>CLIENT: <a href="http://xmpp.org/extensions/xep-0115.html">XEP-0115: Entity Capabilities</a></li>
+<li>CLIENT: <a href="http://xmpp.org/extensions/xep-0071.html">XEP-0071: XHTML-IM</a></li>
+<li>CLIENT: <a href="http://xmpp.org/extensions/xep-0085.html">XEP-0085: Chat State Notifications</a></li>
+<li>CLIENT: <a href="http://xmpp.org/extensions/xep-0065.html">XEP-0065: SOCKS5 Bytestreams</a></li>
+</ul>
+
+<h2><a name="More-XEPs" class="anchor" href="#More-XEPs">More XEPs</a></h2>
+
+<p>Note that all client only XEPs are always supported by the server, even if they are not supported by the client implemented in this repository.</p>
+
+
+        </div>
+        <div class="span3">
+          <a href="https://matthid.github.io/Yaaf.Xmpp.Server/index.html">
+            <img src="https://matthid.github.io/Yaaf.Xmpp.Server/content/img/logo.png" style="width:140px;height:140px;margin:10px 0px 0px 35px;border-style:none;" />
+          </a>
+
+          <ul class="nav nav-list" id="menu">
+
+            <li class="nav-header">Yaaf.Xmpp.Server</li>
+
+            <li class="divider"></li>
+            <li><a href="https://www.nuget.org/packages/Yaaf.Xmpp.Server/">Get Yaaf.Xmpp.Server package via NuGet</a></li>
+            <li><a href="https://github.com/matthid/Yaaf.Xmpp.Server">Source Code</a></li>
+            <li><a href="https://github.com/matthid//issues">Open bugs and feature requests</a></li>
+            <li><a href="https://github.com/matthid//issues/new">Report Issue or Request Feature</a></li>
+            <li><a href="https://github.com/matthid/Yaaf.Xmpp.Server/blob/develop/LICENSE.md">License (Apache 2)</a></li>
+            <li><a href="https://matthid.github.io/Yaaf.Xmpp.Server/Contributing.html">Contributing</a></li>
+            
+            <li class="nav-header">Documentation</li>
+              
+            <li><a href="https://matthid.github.io/Yaaf.Xmpp.Server/index.html">Quick Intro</a></li>
+            <li><a href="https://matthid.github.io/Yaaf.Xmpp.Server/ReleaseNotes.html">Release Notes</a></li>
+            <li><a href="https://matthid.github.io/Yaaf.Xmpp.Server/DevelopReadme.html">Development Intro</a></li>
+            <li><a href="https://matthid.github.io/Yaaf.Xmpp.Server/SupportedFeatures.html">Supported Features</a></li>
+
+            <li class="nav-header">Reference</li>
+              
+            <li><a href="https://matthid.github.io/Yaaf.Xmpp.Server/references/index.html">API Reference</a></li>
+
+          </ul>
+        </div>
+      </div>
+    </div>
+      <a href="https://github.com/matthid/Yaaf.Xmpp.Server"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+    </body>
+  </html>
