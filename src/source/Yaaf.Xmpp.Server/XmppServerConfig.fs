@@ -23,6 +23,8 @@ open Yaaf.Sasl.Ldap
 open Yaaf.Database
 open Yaaf.Xmpp
 open Yaaf.Xmpp.MessageArchiveManager
+open Yaaf.Xmpp.IM.Sql.MySql 
+open Yaaf.Xmpp.MessageArchiveManager.Sql.MySql
 
 type ConfigFile = YamlConfig<"Config.yaml">
 
@@ -75,66 +77,45 @@ type ConnectionStore<'T>() =
     static let mutable connection = null : string
     static member Connection with get() = connection and set v = connection <- v
 module ConnectionStore =
-    let Create<'T when 'T : (new : unit -> 'T) and 'T :> DbContext> (connectionString) =
+    let Create<'T when 'T :> DbContext and 'T :> IUpgradeDatabaseProvider> 
+      deleteDatabase (connectionString) =
         if ConnectionStore<'T>.Connection <> null then
           failwith "multiple connections to the same database type are not supported"
         ConnectionStore<'T>.Connection <- connectionString
-        ( 
-          Log.Info(fun () -> L "Initialize Database %s (connected via: %s)" (typeof<'T>.Name) connectionString)
+        let creator = (fun () -> System.Activator.CreateInstance(typeof<'T>,  [| connectionString :> obj; false :> obj |]) :?> 'T)
+        (
+          Database.SetInitializer<'T>(null)
           use c =
             try
-              new 'T()
+              creator () 
             with :? System.Reflection.TargetInvocationException as e ->
               Async.reraise e.InnerException
-
-          c.Database.Initialize(false)
-          c.SaveChanges() |> ignore
+          if deleteDatabase then
+            c.Database.Delete() |> ignore
+            c.SaveChanges() |> ignore
+          else
+            c.Upgrade()
         )
-        fun () -> new 'T()
-type MySqlHistoryContext (con, scheme) =
-    inherit System.Data.Entity.Migrations.History.HistoryContext(con, scheme)
+        creator
+        
+/// We need this because EF will not allow us to force init otherwise: http://stackoverflow.com/questions/19430502/dropcreatedatabaseifmodelchanges-ef6-results-in-system-invalidoperationexception
+type MSSQLRosterDatabase (connection, doInit) = 
+    inherit MSSQLRosterStoreDbContext(connection, doInit)
+/// We need this because EF will not allow us to force init otherwise: http://stackoverflow.com/questions/19430502/dropcreatedatabaseifmodelchanges-ef6-results-in-system-invalidoperationexception
+type MySQLRosterDatabase (connection, doInit) = 
+    inherit MySqlRosterStoreDbContext(connection, doInit)
 
-    override x.OnModelCreating(modelBuilder) = 
-        base.OnModelCreating(modelBuilder);
-
-        modelBuilder.Entity<System.Data.Entity.Migrations.History.HistoryRow>()
-          .Property(fun h -> h.MigrationId).HasMaxLength(System.Nullable(100)).IsRequired()
-          |> ignore
-        modelBuilder.Entity<System.Data.Entity.Migrations.History.HistoryRow>()
-          .Property(fun h -> h.ContextKey).HasMaxLength(System.Nullable(200)).IsRequired()
-          |> ignore
-
-type MSSQLRosterDatabase<'T> () = 
-    inherit AbstractRosterStoreDbContext(ConnectionStore<MSSQLRosterDatabase<'T>>.Connection)
-
-type MySQLConfiguration<'T when 'T :> DbContext> () as x =
-    inherit System.Data.Entity.Migrations.DbMigrationsConfiguration<'T> ()
-    do
-      x.CodeGenerator <- new MySql.Data.Entity.MySqlMigrationCodeGenerator()
-      x.SetSqlGenerator("MySql.Data.MySqlClient", new MySql.Data.Entity.MySqlMigrationSqlGenerator ())
-      x.SetHistoryContextFactory("MySql.Data.MySqlClient", fun conn schema -> new MySqlHistoryContext(conn, schema) :> _)
-
-      x.AutomaticMigrationsEnabled <- true
-    override x.Seed(context) = ()
-
-type [<DbConfigurationType (typeof<MySql.Data.Entity.MySqlEFConfiguration>)>] MySQLRosterDatabase<'T> () = 
-    inherit AbstractRosterStoreDbContext(ConnectionStore<MySQLRosterDatabase<'T>>.Connection)
-    override x.Init () = 
-        DbConfiguration.SetConfiguration (new MySql.Data.Entity.MySqlEFConfiguration ())
-        System.Data.Entity.Database.SetInitializer<MySQLRosterDatabase<'T>> (
-            new MigrateDatabaseToLatestVersion<MySQLRosterDatabase<'T>, MySQLConfiguration<MySQLRosterDatabase<'T>>> ())
-
-
-let CreateRosterStore (stores : ConfigFile.RosterStore_Item_Type seq) =
+let CreateRosterStore deleteDatabase (stores : ConfigFile.RosterStore_Item_Type seq) =
     let rosterStores =
         stores |> Seq.map (fun store ->
+          Log.Info(fun () -> L "Initialize Roster Database %s (connected via: %s)" store.Type store.ConnectionString) 
           match store.Type with
           | "mssql" ->
-            let creator = ConnectionStore.Create<MSSQLRosterDatabase<MyDB>> store.ConnectionString
+            let creator = ConnectionStore.Create<MSSQLRosterDatabase> deleteDatabase store.ConnectionString
             let sqlStore = new SqlRosterStore(fun () -> creator() :> AbstractRosterStoreDbContext)
             ConcurrentRosterStore(sqlStore) :> IRosterStore
           | "mysql" ->
-            let creator = ConnectionStore.Create<MySQLRosterDatabase<MyDB>> store.ConnectionString
+            let creator = ConnectionStore.Create<MySQLRosterDatabase> deleteDatabase store.ConnectionString
             let sqlStore = new SqlRosterStore(fun () -> creator() :> AbstractRosterStoreDbContext)
             ConcurrentRosterStore(sqlStore) :> IRosterStore
           | _ ->
@@ -144,18 +125,7 @@ let CreateRosterStore (stores : ConfigFile.RosterStore_Item_Type seq) =
     | h :: [] -> h
     | _ ->
       failwith "defining multiple roster stores is not supported."
-   
-type MSSQLMessageArchiveDatabase<'T> () = 
-    inherit AbstractMessageArchivingDbContext(ConnectionStore<MSSQLMessageArchiveDatabase<'T>>.Connection)
 
-
-and [<DbConfigurationType (typeof<MySql.Data.Entity.MySqlEFConfiguration>)>] MySQLMessageArchiveDatabase<'T> () = 
-    inherit AbstractMessageArchivingDbContext(ConnectionStore<MySQLMessageArchiveDatabase<'T>>.Connection)
-    override x.Init () = 
-        DbConfiguration.SetConfiguration (new MySql.Data.Entity.MySqlEFConfiguration ())
-        System.Data.Entity.Database.SetInitializer<MySQLMessageArchiveDatabase<'T>> (
-            new MigrateDatabaseToLatestVersion<MySQLMessageArchiveDatabase<'T>, MySQLConfiguration<MySQLMessageArchiveDatabase<'T>>> ())
- 
 // Hack because we do not have this implemented properly in the backends for now.
 type ReplacePreferenceStoreWithMemory (defStore : Yaaf.Xmpp.MessageArchiving.IMessageArchivingStore) = 
     let userPrefStore = new System.Collections.Concurrent.ConcurrentDictionary<_,IUserPreferenceStore>() // concurrent dictionary!
@@ -178,8 +148,15 @@ type ReplacePreferenceStoreWithMemory (defStore : Yaaf.Xmpp.MessageArchiving.IMe
 
         member x.GetArchiveStore (jid:JabberId) = defStore.GetArchiveStore jid
 
+/// We need this because EF will not allow us to force init otherwise: http://stackoverflow.com/questions/19430502/dropcreatedatabaseifmodelchanges-ef6-results-in-system-invalidoperationexception
+type MSSQLMessageArchiveDatabase (connection, doInit) = 
+    inherit MSSQLMessageArchivingDbContext(connection, doInit)
+    
+/// We need this because EF will not allow us to force init otherwise: http://stackoverflow.com/questions/19430502/dropcreatedatabaseifmodelchanges-ef6-results-in-system-invalidoperationexception
+and MySQLMessageArchiveDatabase (connection, doInit)  = 
+    inherit MySqlArchiveManagerDbContext(connection, doInit)
    
-let CreateMessageArchiveStore (stores : ConfigFile.MessageArchive_Item_Type seq) =
+let CreateMessageArchiveStore deleteDatabase (stores : ConfigFile.MessageArchive_Item_Type seq) =
     let messageStores =
         stores |> Seq.map (fun store ->
           let ret (backendStore:IMessageArchivingStore) = 
@@ -191,13 +168,14 @@ let CreateMessageArchiveStore (stores : ConfigFile.MessageArchive_Item_Type seq)
                 (if store.ReplacePreferenceStoreWithMemory then
                    new ReplacePreferenceStoreWithMemory (backendStore) :> IMessageArchivingStore
                  else backendStore)
+          Log.Info(fun () -> L "Initialize MessageArchive Database %s (connected via: %s)" store.Type store.ConnectionString)
           match store.Type with
           | "mssql" ->
-            let creator = ConnectionStore.Create<MSSQLMessageArchiveDatabase<MyDB>> store.ConnectionString
+            let creator = ConnectionStore.Create<MSSQLMessageArchiveDatabase> deleteDatabase store.ConnectionString
             let sqlStore = new MessageArchivingStore(fun () -> creator() :> AbstractMessageArchivingDbContext)
             ret (sqlStore :> IMessageArchivingStore)
           | "mysql" ->
-            let creator = ConnectionStore.Create<MySQLMessageArchiveDatabase<MyDB>> store.ConnectionString
+            let creator = ConnectionStore.Create<MySQLMessageArchiveDatabase> deleteDatabase store.ConnectionString
             let sqlStore = new MessageArchivingStore(fun () -> creator() :> AbstractMessageArchivingDbContext)
             ret (sqlStore :> IMessageArchivingStore)
           | "imap" ->
@@ -239,7 +217,50 @@ let CreateMessageArchiveStore (stores : ConfigFile.MessageArchive_Item_Type seq)
       | _ -> failwith "you cannot have multiple message archives with read access!"
     ArchivingStore.Combine(writeOnlyStores, normalStore)
 
-let CreateXmppSetup (config:ConfigFile) =
+let CreateXmppSetup deleteDatabase (config:ConfigFile) =
+    let rosterStore, archiveStore =
+      try
+        let rosterStore = CreateRosterStore deleteDatabase config.RosterStore
+        let archiveStore = CreateMessageArchiveStore deleteDatabase config.MessageArchive
+        if deleteDatabase then
+          // normally we don't want to use exceptions for control flow,
+          // however as --force is already a workaround (and should never be used in production)
+          // we will just not continue from this point.
+          failwith "Database created, please run now without --deleteDatabase"
+        else rosterStore, archiveStore
+      with
+      | :? DatabaseUpgradeException as e ->
+        Log.Err(fun () -> L "Database failed to upgrade: %O" e)
+        let scriptFileOrErrorMessage =
+          if e.ScriptGenerationException <> null then e.Message
+          else
+            let file = System.IO.Path.GetFullPath("upgrade.sql")
+            System.IO.File.WriteAllText(file, e.UpgradeScript)
+            file
+        failwithf """
+--- PLEASE READ ---
+--- PLEASE READ ---
+--- PLEASE READ ---
+
+We tried to upgrade your database but failed!
+This is a good time to quickly make a database backup before proceeding.
+If you use MySQL the problem is most likely a bug in MySQL Connector/NET.
+To help you to get out of this situation you have various options:
+
+ * THIS WILL DELETE YOUR CURRENT DATABASE, ALL YOUR DATA WILL BE LOST.
+   You can try to re-create the databas with --deleteDatabase.
+ * We provide you with an initial script and you can try to do the upgrade manually.
+   You can find the script here (note that it needs to be fixed manually before applying): %s
+ * If the bug is known we probably already provide a working script for you.
+   Please try to find it on either on https://matthid.github.io/Yaaf.Xmpp.IM.SQL/ or https://matthid.github.io/Yaaf.MessageArchiveManager.SQL/
+   depending on which database is failing to upgrade.
+
+Additional Information:
+%O
+
+If the Script could not get generated here is more Information:
+%O
+        """ scriptFileOrErrorMessage e e.ScriptGenerationException
 
     XmppServerSetup.CreateDefault config.Domain
     |> XmppServerSetup.addServerCore 
@@ -249,9 +270,10 @@ let CreateXmppSetup (config:ConfigFile) =
     |> XmppServerSetup.addPerUserService
     |> XmppServerSetup.addDiscoPlugin
     |> XmppServerSetup.addIMPlugin 
-        { ImServerConfig.Default with RosterStore = CreateRosterStore config.RosterStore }
+        { ImServerConfig.Default with RosterStore = rosterStore }
     |> XmppServerSetup.addMessageArchivingPlugin 
-        { MessageArchivingServerPluginConfig.Default with MessageArchiveStore = CreateMessageArchiveStore config.MessageArchive }
+        { MessageArchivingServerPluginConfig.Default with MessageArchiveStore = archiveStore }
+
 
 let CreatePortConfig (serverPorts:ConfigFile.ServerPorts_Item_Type seq) =
    serverPorts |> Seq.map (fun portConfig ->
@@ -263,8 +285,8 @@ let CreatePortConfig (serverPorts:ConfigFile.ServerPorts_Item_Type seq) =
       | _ -> failwithf "unknown port type %s" portConfig.Type
    )
 
-let StartFromConfig (config:ConfigFile) =
-    let xmppServer = XmppServer(CreateXmppSetup config)
+let StartFromConfig deleteDatabase (config:ConfigFile) =
+    let xmppServer = XmppServer(CreateXmppSetup deleteDatabase config)
     
     xmppServer.Errors 
         |> Event.add 
