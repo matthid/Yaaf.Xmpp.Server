@@ -3,7 +3,7 @@ source https://nuget.org/api/v2
 
 //Build
 nuget Yaaf.AdvancedBuilding
-nuget NUnit.Runners
+nuget NUnit.Runners == 2.6.3
 nuget Mono.Posix
 
 // Project
