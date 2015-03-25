@@ -52,7 +52,6 @@ Global
 		{4FE5F0BE-9E56-4221-B373-8574E41C8B9B}.Debug|Net45.ActiveCfg = Debug|Net45
 		{4FE5F0BE-9E56-4221-B373-8574E41C8B9B}.Debug|Net45.Build.0 = Debug|Net45
 		{4FE5F0BE-9E56-4221-B373-8574E41C8B9B}.Release|Net45.ActiveCfg = Release|Net45
-		{4FE5F0BE-9E56-4221-B373-8574E41C8B9B}.Release|Net45.Build.0 = Release|Net45
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
