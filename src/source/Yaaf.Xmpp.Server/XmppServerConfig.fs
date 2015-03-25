@@ -15,6 +15,7 @@ open Yaaf.Logging
 open Yaaf.Xmpp.IM.Server
 open Yaaf.Xmpp.IM.Sql
 
+open Yaaf.Xmpp.VCard.Server
 open Yaaf.Xmpp.MessageArchiving.Server
 open Yaaf.Xmpp.MessageArchiveManager.Sql
 open Yaaf.Xmpp.MessageArchiveManager.IMAP
@@ -217,6 +218,31 @@ let CreateMessageArchiveStore deleteDatabase (stores : ConfigFile.MessageArchive
       | _ -> failwith "you cannot have multiple message archives with read access!"
     ArchivingStore.Combine(writeOnlyStores, normalStore)
 
+let GetVCardConfig () = 
+    { VCardSource = 
+        { new IVCardSource with
+            member x.GetVCard i = 
+              System.Threading.Tasks.Task.FromResult
+                (Some ( VCard.VCardInfo.Create(i.Localpart.Value, VCard.VCardName.Create()))) 
+            member x.SetVCard (i, v) = 
+              async {
+                raise <| new System.NotSupportedException("not implemented")
+              } |> Async.StartAsTask :> _
+        }
+    }
+
+let internal SetVCardConfig (setup, config:IVCardConfig) =
+    XmppSetup.SetConfig<VCardConfig,_> (setup, config)
+let internal setVCardConfig config setup = SetVCardConfig(setup, config)
+let AddVCard (setup: ClientSetup, config) = 
+    let setupVCard (runtime:XmppRuntime) = 
+        let mgr = runtime.PluginManager
+        mgr.RegisterPlugin<VCardServerPlugin>()
+    setup
+    |> setVCardConfig config
+    |> XmppSetup.addHelper ignore setupVCard
+let addVCard config setup = AddVCard(setup, config)
+
 let CreateXmppSetup deleteDatabase (config:ConfigFile) =
     let rosterStore, archiveStore =
       try
@@ -269,7 +295,8 @@ If the Script could not get generated here is more Information:
     |> XmppServerSetup.addXmppServerPlugin
     |> XmppServerSetup.addPerUserService
     |> XmppServerSetup.addDiscoPlugin
-    |> XmppServerSetup.addIMPlugin 
+    |> XmppServerSetup.addToAllStreams (addVCard (GetVCardConfig()))
+    |> XmppServerSetup.addIMPlugin
         { ImServerConfig.Default with RosterStore = rosterStore }
     |> XmppServerSetup.addMessageArchivingPlugin 
         { MessageArchivingServerPluginConfig.Default with MessageArchiveStore = archiveStore }
