@@ -30,10 +30,10 @@ NUGET
       MySql.Data (>= 6.8.3.0)
     Novell.Directory.Ldap (2.2.1)
     NUnit (2.6.3)
-    NUnit.Runners (2.6.3)
+    NUnit.Runners (2.6.4)
     SimpleInjector (2.7.3)
     Unquote (2.2.2)
-    Yaaf.AdvancedBuilding (0.5.1)
+    Yaaf.AdvancedBuilding (0.5.2)
       FAKE (3.23.0)
       FSharp.Compiler.Service (0.0.86)
       FSharp.Formatting (2.7.5)
@@ -121,7 +121,7 @@ NUGET
       Yaaf.Xmpp.IM (>= 0.0.1)
       Yaaf.Xmpp.Runtime (>= 0.0.2)
       Yaaf.Xmpp.ServiceDiscovery (>= 0.0.1)
-    Yaaf.Xmpp.Runtime (0.0.6)
+    Yaaf.Xmpp.Runtime (0.0.7)
       FSharp.Core (>= 3.1.2.1)
       Yaaf.DependencyInjection (>= 1.1.0)
       Yaaf.DependencyInjection.SimpleInjector (>= 1.1.3)
@@ -143,4 +143,4 @@ GITHUB
     src/test/Test.Yaaf.FSharp.Helper/MyTestClass.fs (6ea18edb63d1763cb6fe8c612b7b51727337119c)
   remote: matthid/Yaaf.Xmpp.Runtime
   specs:
-    src/test/Test.Yaaf.Xmpp.Runtime/TestHelper.fs (c9daf0f9ec061e973ad42bb0880b3bbd4328cf16)
+    src/test/Test.Yaaf.Xmpp.Runtime/TestHelper.fs (269ade3a662a962e43110d69eab8eeec51ea8685)
