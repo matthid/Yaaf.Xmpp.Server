@@ -73,39 +73,35 @@
         </tr>
         <tr>
           <td class="type-name">
-            <a href="yaaf-xmpp-server-xmppserverconfig-mssqlmessagearchivedatabase-1.html">MSSQLMessageArchiveDatabase<'T></a>
+            <a href="yaaf-xmpp-server-xmppserverconfig-mssqlmessagearchivedatabase.html">MSSQLMessageArchiveDatabase</a>
           </td>
-          <td class="xmldoc"></td>
+          <td class="xmldoc">
+ We need this because EF will not allow us to force init otherwise: http://stackoverflow.com/questions/19430502/dropcreatedatabaseifmodelchanges-ef6-results-in-system-invalidoperationexception
+</br></td>
         </tr>
         <tr>
           <td class="type-name">
-            <a href="yaaf-xmpp-server-xmppserverconfig-mssqlrosterdatabase-1.html">MSSQLRosterDatabase<'T></a>
+            <a href="yaaf-xmpp-server-xmppserverconfig-mssqlrosterdatabase.html">MSSQLRosterDatabase</a>
           </td>
-          <td class="xmldoc"></td>
+          <td class="xmldoc">
+ We need this because EF will not allow us to force init otherwise: http://stackoverflow.com/questions/19430502/dropcreatedatabaseifmodelchanges-ef6-results-in-system-invalidoperationexception
+</br></td>
         </tr>
         <tr>
           <td class="type-name">
-            <a href="yaaf-xmpp-server-xmppserverconfig-mysqlconfiguration-1.html">MySQLConfiguration<'T></a>
+            <a href="yaaf-xmpp-server-xmppserverconfig-mysqlmessagearchivedatabase.html">MySQLMessageArchiveDatabase</a>
           </td>
-          <td class="xmldoc"></td>
+          <td class="xmldoc">
+ We need this because EF will not allow us to force init otherwise: http://stackoverflow.com/questions/19430502/dropcreatedatabaseifmodelchanges-ef6-results-in-system-invalidoperationexception
+</br></td>
         </tr>
         <tr>
           <td class="type-name">
-            <a href="yaaf-xmpp-server-xmppserverconfig-mysqlmessagearchivedatabase-1.html">MySQLMessageArchiveDatabase<'T></a>
+            <a href="yaaf-xmpp-server-xmppserverconfig-mysqlrosterdatabase.html">MySQLRosterDatabase</a>
           </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="yaaf-xmpp-server-xmppserverconfig-mysqlrosterdatabase-1.html">MySQLRosterDatabase<'T></a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="yaaf-xmpp-server-xmppserverconfig-mysqlhistorycontext.html">MySqlHistoryContext</a>
-          </td>
-          <td class="xmldoc"></td>
+          <td class="xmldoc">
+ We need this because EF will not allow us to force init otherwise: http://stackoverflow.com/questions/19430502/dropcreatedatabaseifmodelchanges-ef6-results-in-system-invalidoperationexception
+</br></td>
         </tr>
         <tr>
           <td class="type-name">
@@ -141,14 +137,14 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '23', 23)" onmouseover="showTip(event, '23', 23)">
-            CreateMessageArchiveStore stores
+            addVCard config setup
           </code>
           <div class="tip" id="23">
-            <strong>Signature:</strong> stores:seq&lt;MessageArchive_Item_Type&gt; -&gt; IMessageArchivingStore<br />
+            <strong>Signature:</strong> config:IVCardConfig -&gt; setup:ClientSetup -&gt; ClientSetup<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/matthid//blob/master/src/source/Yaaf.Xmpp.Server/XmppServerConfig.fs#L182-182" class="github-link">
+            <a href="https://github.com/matthid//blob/master/src/source/Yaaf.Xmpp.Server/XmppServerConfig.fs#L244-244" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -159,14 +155,14 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '24', 24)" onmouseover="showTip(event, '24', 24)">
-            CreatePortConfig serverPorts
+            AddVCard (setup, config)
           </code>
           <div class="tip" id="24">
-            <strong>Signature:</strong> serverPorts:seq&lt;ServerPorts_Item_Type&gt; -&gt; seq&lt;StreamType * IPEndPoint&gt;<br />
+            <strong>Signature:</strong> (setup:ClientSetup * config:IVCardConfig) -&gt; ClientSetup<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/matthid//blob/master/src/source/Yaaf.Xmpp.Server/XmppServerConfig.fs#L256-256" class="github-link">
+            <a href="https://github.com/matthid//blob/master/src/source/Yaaf.Xmpp.Server/XmppServerConfig.fs#L237-237" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -177,14 +173,14 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '25', 25)" onmouseover="showTip(event, '25', 25)">
-            CreateRosterStore stores
+            CreateMessageArchiveStore (...)
           </code>
           <div class="tip" id="25">
-            <strong>Signature:</strong> stores:seq&lt;RosterStore_Item_Type&gt; -&gt; IRosterStore<br />
+            <strong>Signature:</strong> deleteDatabase:bool -&gt; stores:seq&lt;MessageArchive_Item_Type&gt; -&gt; IMessageArchivingStore<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/matthid//blob/master/src/source/Yaaf.Xmpp.Server/XmppServerConfig.fs#L128-128" class="github-link">
+            <a href="https://github.com/matthid//blob/master/src/source/Yaaf.Xmpp.Server/XmppServerConfig.fs#L160-160" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -195,14 +191,14 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '26', 26)" onmouseover="showTip(event, '26', 26)">
-            CreateXmppSetup config
+            CreatePortConfig serverPorts
           </code>
           <div class="tip" id="26">
-            <strong>Signature:</strong> config:ConfigFile -&gt; ServerSetup<br />
+            <strong>Signature:</strong> serverPorts:seq&lt;ServerPorts_Item_Type&gt; -&gt; seq&lt;StreamType * IPEndPoint&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/matthid//blob/master/src/source/Yaaf.Xmpp.Server/XmppServerConfig.fs#L242-242" class="github-link">
+            <a href="https://github.com/matthid//blob/master/src/source/Yaaf.Xmpp.Server/XmppServerConfig.fs#L305-305" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -213,14 +209,14 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '27', 27)" onmouseover="showTip(event, '27', 27)">
-            GetCertificate cert
+            CreateRosterStore deleteDatabase stores
           </code>
           <div class="tip" id="27">
-            <strong>Signature:</strong> cert:Certificate_Type -&gt; ServerCertificateData<br />
+            <strong>Signature:</strong> deleteDatabase:bool -&gt; stores:seq&lt;RosterStore_Item_Type&gt; -&gt; IRosterStore<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/matthid//blob/master/src/source/Yaaf.Xmpp.Server/XmppServerConfig.fs#L42-42" class="github-link">
+            <a href="https://github.com/matthid//blob/master/src/source/Yaaf.Xmpp.Server/XmppServerConfig.fs#L109-109" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -231,14 +227,14 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '28', 28)" onmouseover="showTip(event, '28', 28)">
-            GetComponents components
+            CreateXmppSetup deleteDatabase config
           </code>
           <div class="tip" id="28">
-            <strong>Signature:</strong> components:seq&lt;Components_Item_Type&gt; -&gt; ComponentConfig list<br />
+            <strong>Signature:</strong> deleteDatabase:bool -&gt; config:ConfigFile -&gt; ServerSetup<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/matthid//blob/master/src/source/Yaaf.Xmpp.Server/XmppServerConfig.fs#L46-46" class="github-link">
+            <a href="https://github.com/matthid//blob/master/src/source/Yaaf.Xmpp.Server/XmppServerConfig.fs#L246-246" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -249,14 +245,14 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '29', 29)" onmouseover="showTip(event, '29', 29)">
-            GetServerSaslMechanism auths
+            GetCertificate cert
           </code>
           <div class="tip" id="29">
-            <strong>Signature:</strong> auths:seq&lt;Authentication_Item_Type&gt; -&gt; IServerMechanism list<br />
+            <strong>Signature:</strong> cert:Certificate_Type -&gt; ServerCertificateData<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/matthid//blob/master/src/source/Yaaf.Xmpp.Server/XmppServerConfig.fs#L51-51" class="github-link">
+            <a href="https://github.com/matthid//blob/master/src/source/Yaaf.Xmpp.Server/XmppServerConfig.fs#L45-45" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -267,14 +263,14 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '30', 30)" onmouseover="showTip(event, '30', 30)">
-            ParseConnectionString connStr
+            GetComponents components
           </code>
           <div class="tip" id="30">
-            <strong>Signature:</strong> connStr:string -&gt; ConnectionString<br />
+            <strong>Signature:</strong> components:seq&lt;Components_Item_Type&gt; -&gt; ComponentConfig list<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/matthid//blob/master/src/source/Yaaf.Xmpp.Server/XmppServerConfig.fs#L33-33" class="github-link">
+            <a href="https://github.com/matthid//blob/master/src/source/Yaaf.Xmpp.Server/XmppServerConfig.fs#L49-49" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -285,14 +281,14 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '31', 31)" onmouseover="showTip(event, '31', 31)">
-            resourceManager 
+            GetServerSaslMechanism auths
           </code>
           <div class="tip" id="31">
-            <strong>Signature:</strong> IResourceManager<br />
+            <strong>Signature:</strong> auths:seq&lt;Authentication_Item_Type&gt; -&gt; IServerMechanism list<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/matthid//blob/master/src/source/Yaaf.Xmpp.Server/XmppServerConfig.fs#L67-67" class="github-link">
+            <a href="https://github.com/matthid//blob/master/src/source/Yaaf.Xmpp.Server/XmppServerConfig.fs#L54-54" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -303,14 +299,68 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '32', 32)" onmouseover="showTip(event, '32', 32)">
-            StartFromConfig config
+            GetVCardConfig ()
           </code>
           <div class="tip" id="32">
-            <strong>Signature:</strong> config:ConfigFile -&gt; XmppServer<br />
+            <strong>Signature:</strong> unit -&gt; VCardConfig<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/matthid//blob/master/src/source/Yaaf.Xmpp.Server/XmppServerConfig.fs#L266-266" class="github-link">
+            <a href="https://github.com/matthid//blob/master/src/source/Yaaf.Xmpp.Server/XmppServerConfig.fs#L221-221" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '33', 33)" onmouseover="showTip(event, '33', 33)">
+            ParseConnectionString connStr
+          </code>
+          <div class="tip" id="33">
+            <strong>Signature:</strong> connStr:string -&gt; ConnectionString<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/matthid//blob/master/src/source/Yaaf.Xmpp.Server/XmppServerConfig.fs#L36-36" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '34', 34)" onmouseover="showTip(event, '34', 34)">
+            resourceManager 
+          </code>
+          <div class="tip" id="34">
+            <strong>Signature:</strong> IResourceManager<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/matthid//blob/master/src/source/Yaaf.Xmpp.Server/XmppServerConfig.fs#L70-70" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '35', 35)" onmouseover="showTip(event, '35', 35)">
+            StartFromConfig deleteDatabase config
+          </code>
+          <div class="tip" id="35">
+            <strong>Signature:</strong> deleteDatabase:bool -&gt; config:ConfigFile -&gt; XmppServer<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/matthid//blob/master/src/source/Yaaf.Xmpp.Server/XmppServerConfig.fs#L315-315" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>

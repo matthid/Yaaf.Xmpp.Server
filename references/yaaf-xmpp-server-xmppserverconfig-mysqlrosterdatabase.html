@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>MySQLMessageArchiveDatabase<'T> - Yaaf.Xmpp.Server</title>
+    <title>MySQLRosterDatabase - Yaaf.Xmpp.Server</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="Matthias Dittrich">
@@ -38,12 +38,14 @@
 
 
 
-<h1>MySQLMessageArchiveDatabase<'T> </h1>
+<h1>MySQLRosterDatabase </h1>
 <div class="xmldoc">
     Defined in Yaaf.Xmpp.Server.dll.
 </div>
 <div class="xmldoc">
-</div>
+
+ We need this because EF will not allow us to force init otherwise: http://stackoverflow.com/questions/19430502/dropcreatedatabaseifmodelchanges-ef6-results-in-system-invalidoperationexception
+</br></div>
   <h3>Constructors</h3>
   <table class="table table-bordered member-list">
     <thead>
@@ -53,15 +55,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '50', 50)" onmouseover="showTip(event, '50', 50)">
-            new()
+          <code onmouseout="hideTip(event, '53', 53)" onmouseover="showTip(event, '53', 53)">
+            new(connection, doInit)
           </code>
-          <div class="tip" id="50">
-            <strong>Signature:</strong> unit -&gt; MySQLMessageArchiveDatabase&lt;&#39;T&gt;<br />
+          <div class="tip" id="53">
+            <strong>Signature:</strong> (connection:string * doInit:bool) -&gt; MySQLRosterDatabase<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/matthid//blob/master/src/source/Yaaf.Xmpp.Server/XmppServerConfig.fs#L152-152" class="github-link">
+            <a href="https://github.com/matthid//blob/master/src/source/Yaaf.Xmpp.Server/XmppServerConfig.fs#L106-106" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
