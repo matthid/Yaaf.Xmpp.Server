@@ -1,16 +1,15 @@
-source https://nuget.org/api/v2
 redirects: on
+source https://nuget.org/api/v2
 
 //Build
 nuget Yaaf.AdvancedBuilding
 nuget NUnit.Runners
-// Until windows support is fixed
-nuget FSharp.Formatting == 2.6.3
+nuget Mono.Posix
 
 // Project
-nuget Mono.Posix
 nuget FSharp.Configuration
 nuget FSharp.Core
+nuget Yaaf.Database.MySQL
 nuget Yaaf.FSharp.Helper
 nuget Yaaf.Sasl.Ldap
 nuget Yaaf.Xmpp.Runtime
@@ -22,18 +21,16 @@ nuget Yaaf.Xmpp.MessageArchiving
 nuget Yaaf.MessageArchiveManager
 nuget Yaaf.MessageArchiveManager.IMAP
 nuget Yaaf.MessageArchiveManager.MySQL
-
-// Not required but we restrict updates...
 nuget EntityFramework == 6.0.2
+// Not required but we restrict updates...
 nuget Microsoft.AspNet.Identity.Core == 1.0.0
 nuget Microsoft.AspNet.Identity.EntityFramework == 1.0.0
 nuget MySql.Data == 6.8.3
 nuget MySQL.Data.Entities == 6.8.3.0
-
-// Test
-// Until Visual Studio test runner supports later versions.
 nuget NUnit == 2.6.3
 nuget Unquote
+// Test
+// Until Visual Studio test runner supports later versions.
 nuget Foq content: none
 nuget FsUnit
 

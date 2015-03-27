@@ -8,6 +8,8 @@ This project uses Yaaf.AdvancedBuilding, see https://matthid.github.io/Yaaf.Adva
 
 This is a simple XMPP server implementation using the Yaaf.Xmpp.* libraries.
 
+See also https://github.com/matthid/Yaaf.Xmpp.Runtime and the other Yaaf.Xmpp projects used in this server implementation.
+
 ### Issues / Features / TODOs
 
 New features are accepted via github pull requests (so just fork away right now!):  https://github.com/matthid/Yaaf.Xmpp.Server

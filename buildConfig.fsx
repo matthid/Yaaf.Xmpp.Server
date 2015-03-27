@@ -62,8 +62,14 @@ let buildConfig =
      [ { BuildParams.WithSolution with
           // The default build
           PlatformName = "Net45"
-          // Workaround FSharp.Compiler.Service not liking to have a FSharp.Core here: https://github.com/fsprojects/FSharpx.Reflection/issues/1
-          AfterBuild = fun _ -> File.Delete "build/net45/FSharp.Core.dll"
+          AfterBuild = fun _ ->
+            if isMono then
+              // Fix MySql.Data.Entities
+              File.Copy("build/test/net45/mysql.data.entity.EF6.dll", "build/test/net45/MySql.Data.Entity.EF6.dll", true)
+              File.Copy("build/net45/mysql.data.entity.EF6.dll", "build/net45/MySql.Data.Entity.EF6.dll", true)
+              // Delete Mono.Security.dll (use the gac version to prevent protocol errors)
+              File.Delete "build/net45/Mono.Security.dll"
+              File.Delete "build/test/net45/Mono.Security.dll"
           SimpleBuildName = "net45" }
        (*{ BuildParams.WithSolution with
           // The default build

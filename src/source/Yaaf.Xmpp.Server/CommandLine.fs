@@ -7,6 +7,7 @@ open Yaaf.Logging
 type ConfigFile = XmppServerConfig.ConfigFile
 type Args =
   { IsDaemon : bool
+    DeleteDatabase : bool
     ConfigFile : ConfigFile }
     
 
@@ -21,6 +22,7 @@ Options:
 
 --help               : Print this help
 --daemon             : Run in daemon mode
+--deleteDatabase     : WILL DELETE YOUR DATABASE AND RE-CREATE IT.
 --configFile <file>  : Use the specified config file instead of 'config.yaml'
 
     """
@@ -29,6 +31,7 @@ Options:
           None
         else
         let isDaemon = args |> Seq.exists (fun i -> i = "--daemon")
+        let deleteDatabase = args |> Seq.exists (fun i -> i = "--deleteDatabase")
         let getNamed args name =
           let rec getNamedHelper current args name =
             let remainder = args |> Seq.skipWhile (fun i -> i <> name)
@@ -52,7 +55,7 @@ Options:
             | _ -> "config.yml"
         let config = ConfigFile()
         config.Load configFile
-        Some { IsDaemon= isDaemon; ConfigFile = config }
+        Some { IsDaemon= isDaemon; DeleteDatabase = deleteDatabase; ConfigFile = config }
         
     let mutable exited = false
     let mutable cleanedUp = false
@@ -60,8 +63,10 @@ Options:
     let mutable xmppServer = Unchecked.defaultof<_>
 
     let runServer (args:Args) =
+        if args.IsDaemon && args.DeleteDatabase then 
+          failwith "--daemon mode in combination with --deleteDatabase is not supported."
         let runServer () =
-            xmppServer <- XmppServerConfig.StartFromConfig args.ConfigFile
+            xmppServer <- XmppServerConfig.StartFromConfig args.DeleteDatabase args.ConfigFile
 
         let cleanUp () = 
             let doClean =
